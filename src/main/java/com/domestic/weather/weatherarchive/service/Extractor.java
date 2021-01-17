@@ -31,8 +31,8 @@ public class Extractor {
     public DailyTemperature getTemperatureAt(City city, LocalDate date) {
         long start = System.nanoTime();
         log.info("Collecting daily temperature for city {}, at {}", city, date);
-//        String dateFormatted = DATE_FORMATTER.format(date);
-        String url = WEATHER_ARCHIVE_URL + city.getCode() + '/' + city.getName() + '/' + date.toString();
+        String dateFormatted = DATE_FORMATTER.format(date);
+        String url = WEATHER_ARCHIVE_URL + city.getCode() + '/' + city.getName() + '/' + dateFormatted;
         Connection connection = Jsoup.connect(url);
         Document document = connection.get();
         Element weatherTable = document.selectFirst(".archive_table");
@@ -45,9 +45,8 @@ public class Extractor {
                     String time = columns.get(0).text();
                     String temperature = columns.get(2).text();
                     LocalTime timeParsed = LocalTime.parse(time, TIME_FORMATTER);
-                    char firstChar = time.charAt(0);
-                    String sign = firstChar == '-' || firstChar == '+' ? String.valueOf(firstChar) : "";
-                    int tempParsed = Integer.parseInt(sign + time.replace("[^\\d]", ""));
+                    String firstChar = time.substring(0, 1);
+                    int tempParsed = Integer.parseInt(temperature.substring(0, temperature.length() - 2));
                     return new WeatherMeasurementDto(timeParsed, tempParsed);
                 })
                 .collect(Collectors.toList());
@@ -59,10 +58,10 @@ public class Extractor {
     }
 
     public static void main(String[] args) throws IOException {
-        DailyTemperature temp = new Extractor().getTemperatureAt(City.ODESSA, LocalDate.of(2018, 11, 11));
+        DailyTemperature temp = new Extractor().getTemperatureAt(City.ODESSA, LocalDate.of(2010, 1, 2));
 
         log.info("Start getting content html page");
-        Connection connection = Jsoup.connect("https://meteo.ua/archive/111/odessa/2010-1-8");
+        Connection connection = Jsoup.connect("https://meteo.ua/archive/111/odessa/2010-1-2");
         Document document = connection.get();
         log.info("Received content of html page");
         Element weatherTable = document.selectFirst(".archive_table");
@@ -78,7 +77,7 @@ public class Extractor {
         IntStream.range(0, times.size()).boxed()
                 .forEach(i ->
                         log.info("At {} o'clock temperature was {}", times.get(i).text(), temperatures.get(i).text()));
-       // [16-20] ms
+        // [16-20] ms
         Elements rows = weatherTable.select("tbody>tr");
         rows.stream()
                 .skip(1)
