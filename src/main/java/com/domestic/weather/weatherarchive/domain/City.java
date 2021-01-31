@@ -1,7 +1,7 @@
 package com.domestic.weather.weatherarchive.domain;
 
 public enum City {
-    ODESSA("Odessa", 111);
+    ODESSA("odessa", 111);
 
     private final String name;
     private final int code;
