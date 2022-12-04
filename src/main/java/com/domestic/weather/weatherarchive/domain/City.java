@@ -1,14 +1,17 @@
 package com.domestic.weather.weatherarchive.domain;
 
 public enum City {
-    ODESSA("odessa", 111);
+    ODESSA("odessa", 111, "погода-одеса");
 
     private final String name;
     private final int code;
 
-    City(String name, int code) {
+    private final String keyWord;
+
+    City(String name, int code, String keyWord) {
         this.name = name;
         this.code = code;
+        this.keyWord = keyWord;
     }
 
     public String getName() {
@@ -17,6 +20,10 @@ public enum City {
 
     public int getCode() {
         return code;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
     }
 
     @Override

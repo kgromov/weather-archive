@@ -19,12 +19,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TemperatureService {
     private final DailyTemperatureRepository temperatureRepository;
-    private final Extractor extractor;
+//    private final MeteoExtractor meteoExtractor;
+    private final SinoptikExtractor sinoptikExtractor;
 
     public List<DailyTemperature> getTemperatureForYearsInCity(City city, int startYear, int endYear) {
         LocalDate startDate = Year.of(startYear).atDay(1);
         LocalDate endDate = Year.of(endYear).atDay(1);
-        List<DailyTemperatureDto> temperatures = extractor.getTemperatureForRange(city, startDate, endDate);
+        return getTemperatureForYearsInCity(city, startDate, endDate);
+    }
+
+    public List<DailyTemperature> getTemperatureForYearsInCity(City city, LocalDate startDate, LocalDate endDate) {
+        List<DailyTemperatureDto> temperatures = sinoptikExtractor.getTemperatureForRange(city, startDate, endDate);
         return temperatures.stream()
                 .parallel()
                 .map(DailyTemperature::new)
