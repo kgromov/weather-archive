@@ -2,8 +2,8 @@ package com.domestic.weather.weatherarchive.service;
 
 import com.domestic.weather.weatherarchive.domain.City;
 import com.domestic.weather.weatherarchive.domain.DailyTemperature;
-import com.domestic.weather.weatherarchive.domain.DailyTemperatureDto;
-import com.domestic.weather.weatherarchive.repositories.DailyTemperatureRepository;
+import com.domestic.weather.weatherarchive.domain.TemperatureMeasurementsDto;
+import com.domestic.weather.weatherarchive.repository.DailyTemperatureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +29,7 @@ public class TemperatureService {
     }
 
     public List<DailyTemperature> getTemperatureForYearsInCity(City city, LocalDate startDate, LocalDate endDate) {
-        List<DailyTemperatureDto> temperatures = sinoptikExtractor.getTemperatureForRange(city, startDate, endDate);
+        List<TemperatureMeasurementsDto> temperatures = sinoptikExtractor.getTemperatureForRange(city, startDate, endDate);
         return temperatures.stream()
                 .parallel()
                 .map(DailyTemperature::new)

@@ -7,7 +7,12 @@ import com.domestic.weather.weatherarchive.service.TemperatureService;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.time.LocalDate;
@@ -17,21 +22,30 @@ import java.util.List;
 @SpringBootApplication
 @EnableJpaRepositories
 public class WeatherArchiveApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(WeatherArchiveApplication.class, args);
     }
 
     @Bean
+//    @Conditional(PopulateTemperatureCondition.class)
+    @ConditionalOnProperty(value = "weather.populate", havingValue = "true")
     ApplicationRunner applicationRunner(TemperatureService temperatureService, SinoptikExtractot sinoptikExtractot) {
         return args -> {
 //        DailyTemperatureDto todayTemperature = extractor.getTemperatureAt(City.ODESSA, LocalDate.now());
 //        temperatureService.saveTemperature(new DailyTemperature(todayTemperature));
 //            List<DailyTemperature> temperatureForYearsInCity = temperatureService.getTemperatureForYearsInCity(City.ODESSA, 2021, 2022);
-            LocalDate startDate = Year.of(2021).atDay(1);
+            LocalDate startDate = Year.of(2021).atDay(2);
             LocalDate endDate = LocalDate.now();
             List<DailyTemperature> temperatureForYearsInCity = temperatureService.getTemperatureForYearsInCity(City.ODESSA, startDate, endDate);
             temperatureService.saveTemperature(temperatureForYearsInCity);
         };
+    }
+
+    private static class PopulateTemperatureCondition implements Condition {
+
+        @Override
+        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+            return Boolean.parseBoolean(context.getEnvironment().getProperty("weather.populate", "false"));
+        }
     }
 }

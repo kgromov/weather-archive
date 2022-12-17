@@ -1,7 +1,7 @@
 package com.domestic.weather.weatherarchive.service;
 
 import com.domestic.weather.weatherarchive.domain.City;
-import com.domestic.weather.weatherarchive.domain.DailyTemperatureDto;
+import com.domestic.weather.weatherarchive.domain.TemperatureMeasurementsDto;
 import lombok.SneakyThrows;
 
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public interface Extractor {
-    default List<DailyTemperatureDto> getTemperatureForRange(City city, LocalDate startDate, LocalDate endDate) {
+    default List<TemperatureMeasurementsDto> getTemperatureForRange(City city, LocalDate startDate, LocalDate endDate) {
         return Stream.iterate(startDate, d -> d.plusDays(1))
                 .limit(ChronoUnit.DAYS.between(startDate, endDate) + 1)
                 .map(date -> getTemperatureAt(city, date))
@@ -22,5 +22,5 @@ public interface Extractor {
     }
 
     @SneakyThrows
-    Optional<DailyTemperatureDto> getTemperatureAt(City city, LocalDate date);
+    Optional<TemperatureMeasurementsDto> getTemperatureAt(City city, LocalDate date);
 }

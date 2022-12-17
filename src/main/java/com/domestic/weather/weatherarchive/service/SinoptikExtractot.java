@@ -1,7 +1,7 @@
 package com.domestic.weather.weatherarchive.service;
 
 import com.domestic.weather.weatherarchive.domain.City;
-import com.domestic.weather.weatherarchive.domain.DailyTemperatureDto;
+import com.domestic.weather.weatherarchive.domain.TemperatureMeasurementsDto;
 import com.domestic.weather.weatherarchive.domain.WeatherMeasurementDto;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class SinoptikExtractot implements Extractor {
 
     @Override
     @SneakyThrows
-    public Optional<DailyTemperatureDto> getTemperatureAt(City city, LocalDate date) {
+    public Optional<TemperatureMeasurementsDto> getTemperatureAt(City city, LocalDate date) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("MeteoExtractor#getTemperatureAt");
         log.info("Collecting daily temperature for city {}, at {}", city, date);
@@ -45,10 +45,10 @@ public class SinoptikExtractot implements Extractor {
                     .skip(1)
                     .map(SinoptikExtractot::mapToWeatherMeasurementDto)
                     .collect(Collectors.toList());
-            DailyTemperatureDto dailyTemperatureDto = new DailyTemperatureDto();
-            dailyTemperatureDto.setDate(date);
-            dailyTemperatureDto.setDailyMeasurements(dailyMeasurements);
-            return Optional.of(dailyTemperatureDto);
+            TemperatureMeasurementsDto temperatureMeasurementsDto = new TemperatureMeasurementsDto();
+            temperatureMeasurementsDto.setDate(date);
+            temperatureMeasurementsDto.setDailyMeasurements(dailyMeasurements);
+            return Optional.of(temperatureMeasurementsDto);
         } catch (NullPointerException e) {
             log.error("No weather for specified date {} in city = {}", dateFormatted, city);
             return Optional.empty();
@@ -68,7 +68,7 @@ public class SinoptikExtractot implements Extractor {
     }
 
     public static void main(String[] args) throws IOException {
-        DailyTemperatureDto temp = new SinoptikExtractot().getTemperatureAt(City.ODESSA, LocalDate.of(2011, 1, 2)).get();
+        TemperatureMeasurementsDto temp = new SinoptikExtractot().getTemperatureAt(City.ODESSA, LocalDate.of(2011, 1, 2)).get();
 
         log.info("Start getting content html page");
         Connection connection = Jsoup.connect("https://meteo.ua/archive/111/odessa/2010-10-31");

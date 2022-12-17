@@ -13,7 +13,7 @@ import static com.domestic.weather.weatherarchive.domain.PartOfTheDay.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailyTemperatureDto {
+public class TemperatureMeasurementsDto {
     private LocalDate date;
     private List<WeatherMeasurementDto> dailyMeasurements;
 

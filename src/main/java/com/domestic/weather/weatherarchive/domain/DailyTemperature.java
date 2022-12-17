@@ -1,33 +1,33 @@
 package com.domestic.weather.weatherarchive.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "DayTemperature")
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = {"id", "date"})
+@Builder
 public class DailyTemperature {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @JoinColumn(unique = true)
     private LocalDate date;
     private Double morningTemperature;
     private Double afternoonTemperature;
     private Double eveningTemperature;
     private Double nightTemperature;
 
-    public DailyTemperature(DailyTemperatureDto dailyTemperatureDto) {
-        this.date = dailyTemperatureDto.getDate();
-        this.morningTemperature = dailyTemperatureDto.getMorningTemperature();
-        this.afternoonTemperature = dailyTemperatureDto.getAfternoonTemperature();
-        this.eveningTemperature = dailyTemperatureDto.getEveningTemperature();
-        this.nightTemperature = dailyTemperatureDto.getNightTemperature();
+    public DailyTemperature(TemperatureMeasurementsDto temperatureMeasurementsDto) {
+        this.date = temperatureMeasurementsDto.getDate();
+        this.morningTemperature = temperatureMeasurementsDto.getMorningTemperature();
+        this.afternoonTemperature = temperatureMeasurementsDto.getAfternoonTemperature();
+        this.eveningTemperature = temperatureMeasurementsDto.getEveningTemperature();
+        this.nightTemperature = temperatureMeasurementsDto.getNightTemperature();
     }
 }

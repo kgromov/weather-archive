@@ -1,7 +1,7 @@
 package com.domestic.weather.weatherarchive.service;
 
 import com.domestic.weather.weatherarchive.domain.City;
-import com.domestic.weather.weatherarchive.domain.DailyTemperatureDto;
+import com.domestic.weather.weatherarchive.domain.TemperatureMeasurementsDto;
 import com.domestic.weather.weatherarchive.domain.WeatherMeasurementDto;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
@@ -31,7 +31,7 @@ public class SinoptikExtractor implements Extractor {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
-    public Optional<DailyTemperatureDto> getTemperatureAt(City city, LocalDate measurementDate) {
+    public Optional<TemperatureMeasurementsDto> getTemperatureAt(City city, LocalDate measurementDate) {
         long start = System.nanoTime();
         log.info("Collecting daily temperature for city {}, at {}", city, measurementDate);
         String dateFormatted = DATE_FORMATTER.format(measurementDate);
@@ -50,10 +50,10 @@ public class SinoptikExtractor implements Extractor {
                     .map(data -> mapToWeatherMeasurementDto(data.getFirst(), data.getSecond()))
                     .collect(Collectors.toList());
 
-            DailyTemperatureDto dailyTemperatureDto = new DailyTemperatureDto();
-            dailyTemperatureDto.setDate(measurementDate);
-            dailyTemperatureDto.setDailyMeasurements(dailyMeasurements);
-            return Optional.of(dailyTemperatureDto);
+            TemperatureMeasurementsDto temperatureMeasurementsDto = new TemperatureMeasurementsDto();
+            temperatureMeasurementsDto.setDate(measurementDate);
+            temperatureMeasurementsDto.setDailyMeasurements(dailyMeasurements);
+            return Optional.of(temperatureMeasurementsDto);
         } catch (NullPointerException e) {
             log.error("No weather for specified date {} in city = {}", dateFormatted, city);
             return Optional.empty();
