@@ -25,4 +25,12 @@ public interface DailyTemperatureRepository extends JpaRepository<DailyTemperatu
             nativeQuery = true
     )
     List<DailyTemperature> findByDateInRange(LocalDate date, int years);
+
+    @Query(
+            value = "SELECT * FROM DayTemperature d " +
+                    "ORDER BY d.date DESC " +
+                    "LIMIT 1",
+            nativeQuery = true
+    )
+    DailyTemperature findLatestDateTemperature();
 }
