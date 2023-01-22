@@ -15,12 +15,18 @@ import java.time.LocalDate;
 public class DailyTemperature {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+  /*  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq_gen")
+    @SequenceGenerator(name = "users_seq_gen", sequenceName = "users_id_seq")*/
     private Long id;
     @JoinColumn(unique = true)
     private LocalDate date;
+    @Column(name = "morning_temperature")
     private Double morningTemperature;
+    @Column(name = "afternoon_temperature")
     private Double afternoonTemperature;
+    @Column(name = "evening_temperature")
     private Double eveningTemperature;
+    @Column(name = "night_temperature")
     private Double nightTemperature;
 
     public DailyTemperature(TemperatureMeasurementsDto temperatureMeasurementsDto) {
