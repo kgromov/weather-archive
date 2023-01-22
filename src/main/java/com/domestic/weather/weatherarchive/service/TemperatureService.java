@@ -37,6 +37,11 @@ public class TemperatureService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public DailyTemperature getLatestDateTemperature() {
+        return temperatureRepository.findLatestDateTemperature();
+    }
+
     @Transactional
     public void saveTemperature(Collection<DailyTemperature> daysTemperature) {
         temperatureRepository.saveAll(daysTemperature);
