@@ -1,6 +1,6 @@
 package com.domestic.weather.weatherarchive.sync;
 
-import com.domestic.weather.weatherarchive.config.BrokerSettings;
+import com.aqmp.example.config.BrokerSettings;
 import events.SyncEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

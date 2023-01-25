@@ -1,12 +1,12 @@
 package com.domestic.weather.weatherarchive;
 
-import com.domestic.weather.weatherarchive.config.BrokerSettings;
+import com.aqmp.example.config.BrokerSettings;
 import com.domestic.weather.weatherarchive.sync.SyncService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories
-@EnableConfigurationProperties(BrokerSettings.class)
+@Slf4j
 public class WeatherArchiveApplication {
     public static void main(String[] args) {
         SpringApplication.run(WeatherArchiveApplication.class, args);
@@ -23,8 +23,9 @@ public class WeatherArchiveApplication {
 
     @Bean
     @ConditionalOnProperty(value = "weather.populate", havingValue = "true")
-    ApplicationRunner applicationRunner(SyncService syncService) {
+    ApplicationRunner applicationRunner(SyncService syncService, BrokerSettings brokerSettings) {
         return args -> {
+            log.info("Broker settings: {}", brokerSettings);
            syncService.syncDailyTemperature();
         };
     }
