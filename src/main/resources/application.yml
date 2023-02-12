@@ -18,3 +18,15 @@ spring:
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
+  kafka:
+    template:
+      default-topic: sync-weather
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      properties:
+#        spring:
+#          json:
+#            type:
+#              mapping: event:events.SyncEvent

@@ -1,6 +1,5 @@
 package com.domestic.weather.weatherarchive;
 
-import com.aqmp.example.config.BrokerSettings;
 import com.domestic.weather.weatherarchive.sync.SyncService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
@@ -23,9 +22,8 @@ public class WeatherArchiveApplication {
 
     @Bean
     @ConditionalOnProperty(value = "weather.populate", havingValue = "true")
-    ApplicationRunner applicationRunner(SyncService syncService, BrokerSettings brokerSettings) {
+    ApplicationRunner applicationRunner(SyncService syncService) {
         return args -> {
-            log.info("Broker settings: {}", brokerSettings);
            syncService.syncDailyTemperature();
         };
     }

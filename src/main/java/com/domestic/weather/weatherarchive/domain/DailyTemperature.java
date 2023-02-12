@@ -20,13 +20,13 @@ public class DailyTemperature {
     private Long id;
     @JoinColumn(unique = true)
     private LocalDate date;
-    @Column(name = "morning_temperature")
+    @Column(name = "morningTemperature")
     private Double morningTemperature;
-    @Column(name = "afternoon_temperature")
+    @Column(name = "afternoonTemperature")
     private Double afternoonTemperature;
-    @Column(name = "evening_temperature")
+    @Column(name = "eveningTemperature")
     private Double eveningTemperature;
-    @Column(name = "night_temperature")
+    @Column(name = "nightTemperature")
     private Double nightTemperature;
 
     public DailyTemperature(TemperatureMeasurementsDto temperatureMeasurementsDto) {
