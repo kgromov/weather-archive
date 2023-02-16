@@ -18,10 +18,12 @@ spring:
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
-  kafka:
-    template:
-      default-topic: sync-weather
-    producer:
-      bootstrap-servers: localhost:9092
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  cloud:
+    stream:
+      #      kafka:
+      #        binder:
+      #          brokers: localhost:9092
+      bindings:
+        weatherEventConsumer-out-0:
+          destination: sync-weather
+      default-binder: ${spring.profiles.active:kafka}
