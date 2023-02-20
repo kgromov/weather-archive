@@ -20,10 +20,6 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
   cloud:
     stream:
-      #      kafka:
-      #        binder:
-      #          brokers: localhost:9092
       bindings:
         weatherEventConsumer-out-0:
           destination: sync-weather
-      default-binder: ${spring.profiles.active:kafka}
