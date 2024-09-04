@@ -2,6 +2,8 @@ package com.domestic.weather.weatherarchive;
 
 import com.domestic.weather.weatherarchive.sync.SyncService;
 import lombok.extern.slf4j.Slf4j;
+import org.htmlunit.BrowserVersion;
+import org.htmlunit.WebClient;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,8 +26,18 @@ public class WeatherArchiveApplication {
     @ConditionalOnProperty(value = "weather.populate", havingValue = "true")
     ApplicationRunner applicationRunner(SyncService syncService) {
         return args -> {
-           syncService.syncDailyTemperature();
+            syncService.syncDailyTemperature();
         };
+    }
+
+    @Bean
+    WebClient webClient() {
+        WebClient client = new WebClient(BrowserVersion.CHROME);
+        client.getOptions().setCssEnabled(false);
+        client.getOptions().setJavaScriptEnabled(false);
+        client.getOptions().setUseInsecureSSL(true);
+        client.getOptions().setThrowExceptionOnScriptError(false);
+        return client;
     }
 
     private static class PopulateTemperatureCondition implements Condition {

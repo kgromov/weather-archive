@@ -30,3 +30,8 @@ spring:
 #          json:
 #            type:
 #              mapping: event:events.SyncEvent
+logging:
+  level:
+    org:
+      htmlunit:
+        html: error
